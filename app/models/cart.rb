@@ -32,6 +32,25 @@ class Cart
     grand_total
   end
 
+  def grand_total_after_discount
+    discounts = []
+    total_undiscounted = 0.0
+    grand_total_after_discount = 0.0
+    @contents.each do |item_id, quantity|
+      item = Item.find(item_id)
+      if item.discount && contents[item.id.to_s] >= item.discount.quantity_required
+        grand_total_after_discount += (item.price * quantity)
+        discounts << item.discount.discount
+      elsif
+        total_undiscounted += (item.price * quantity)
+      end
+    end
+    if discounts != []
+      grand_total_after_discount -= (grand_total_after_discount * discounts.max)
+    end
+    grand_total_after_discount += total_undiscounted
+  end
+
   def count_of(item_id)
     @contents[item_id.to_s]
   end
@@ -43,4 +62,14 @@ class Cart
   def limit_reached?(item_id)
     count_of(item_id) == Item.find(item_id).inventory
   end
+
+  def apply_discount(item)
+    if item.discount && contents[item.id.to_s] >= item.discount.quantity_required
+      total_off = item.discount.discount * subtotal_of(item.id)
+      subtotal = subtotal_of(item.id) - total_off
+    else
+      subtotal_of(item.id)
+    end
+  end
+
 end

@@ -1,0 +1,13 @@
+<br><%= form_tag "/merchant/item/#{@discount.id}/discount/update" do %>
+
+<label>Discount Percent: as a decimal ex.(.10)</label>
+<%= text_field_tag :discount, @discount.discount %><br><br>
+
+<label>Discount Quantity:</label>
+<%= text_field_tag :quantity_required, @discount.quantity_required %><br><br>
+
+<%= hidden_field_tag :item_id, @discount.item_id %>
+<%= hidden_field_tag :merchant_id, @discount.merchant_id %>
+
+<%= submit_tag 'Update Discount' %>
+<% end %>

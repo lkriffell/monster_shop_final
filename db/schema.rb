@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190724161751) do
+ActiveRecord::Schema.define(version: 2020_09_19_183129) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "discounts", force: :cascade do |t|
+    t.float "discount"
+    t.integer "quantity_required"
+    t.bigint "item_id"
+    t.bigint "merchant_id"
+    t.index ["item_id"], name: "index_discounts_on_item_id"
+    t.index ["merchant_id"], name: "index_discounts_on_merchant_id"
+  end
 
   create_table "items", force: :cascade do |t|
     t.string "name"
@@ -25,6 +34,7 @@ ActiveRecord::Schema.define(version: 20190724161751) do
     t.bigint "merchant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "discount?"
     t.index ["merchant_id"], name: "index_items_on_merchant_id"
   end
 
@@ -47,6 +57,7 @@ ActiveRecord::Schema.define(version: 20190724161751) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "fulfilled", default: false
+    t.float "discount"
     t.index ["item_id"], name: "index_order_items_on_item_id"
     t.index ["order_id"], name: "index_order_items_on_order_id"
   end
@@ -84,6 +95,8 @@ ActiveRecord::Schema.define(version: 20190724161751) do
     t.index ["merchant_id"], name: "index_users_on_merchant_id"
   end
 
+  add_foreign_key "discounts", "items"
+  add_foreign_key "discounts", "merchants"
   add_foreign_key "items", "merchants"
   add_foreign_key "order_items", "items"
   add_foreign_key "order_items", "orders"

@@ -16,6 +16,13 @@
     <%= link_to(image_tag(item.image), item_path(item), id: 'image') %>
     <p>Price: <%= number_to_currency(item.price) %></p>
     <p>Sold by: <%= link_to item.merchant.name, "/merchants/#{item.merchant_id}" %>, Inventory: <%= item.inventory %></p>
+    <% if item.discount && current_merchant_user? %>
+      <p>Discount: <%= item.discount.discount * 100 %>% off <%= item.discount.quantity_required %> items or more</p>
+        <%= link_to "Remove Discount", "/merchant/item/#{item.id}/discount/destroy", method: :delete %>
+        <%= link_to "Edit Bulk Discount", "/merchant/item/#{item.id}/discount/edit" %><br>
+    <% elsif current_merchant_user? %>
+      <%= link_to "Create Bulk Discount", "/merchant/item/#{item.id}/discount/new" %><br>
+    <% end %>
     <p><%= item.active ? "Active" : "Inactive" %></p>
     <% if current_merchant_user? %>
       <% if item.active? %>

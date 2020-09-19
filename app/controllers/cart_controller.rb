@@ -1,6 +1,6 @@
 class CartController < ApplicationController
   before_action :exclude_admin
-  
+
   def add_item
     item = Item.find(params[:item_id])
     session[:cart] ||= {}
@@ -28,6 +28,7 @@ class CartController < ApplicationController
   end
 
   def update_quantity
+    item = Item.find(params[:item_id])
     if params[:change] == "more"
       cart.add_item(params[:item_id])
     elsif params[:change] == "less"
