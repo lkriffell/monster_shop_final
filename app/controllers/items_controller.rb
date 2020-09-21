@@ -10,7 +10,6 @@ class ItemsController < ApplicationController
 
   def show
     @item = Item.find(params[:id])
-    @discount = @item.discount
     @merchant = Merchant.find(@item.merchant_id)
   end
 end

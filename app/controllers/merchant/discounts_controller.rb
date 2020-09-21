@@ -1,7 +1,6 @@
 class Merchant::DiscountsController < Merchant::BaseController
   def new
-    @item = Item.find(params[:id])
-    @merchant = Merchant.find(@item.merchant_id)
+    @merchant = Merchant.find(params[:id])
   end
 
   def create
@@ -10,8 +9,7 @@ class Merchant::DiscountsController < Merchant::BaseController
   end
 
   def edit
-    @item = Item.find(params[:id])
-    @discount = @item.discount
+    @discount = Discount.find(params[:discount_id])
   end
 
   def update
@@ -21,14 +19,13 @@ class Merchant::DiscountsController < Merchant::BaseController
   end
 
   def destroy
-    @item = Item.find(params[:id])
-    @item.discount.delete
+    Discount.find(params[:discount_id]).delete
     redirect_to "/merchant/items"
   end
 
   private
   def discount_params
-    params.permit(:discount, :quantity_required, :item_id, :merchant_id)
+    params.permit(:percent_off, :min_quantity, :merchant_id)
   end
 
 end

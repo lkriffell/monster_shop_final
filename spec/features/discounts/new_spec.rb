@@ -18,16 +18,16 @@ RSpec.describe 'Merchant items index page' do
 
       click_link "Create Bulk Discount"
 
-      fill_in :discount, with: 0.1
-      fill_in :quantity_required, with: 5
+      fill_in :percent_off, with: 0.1
+      fill_in :min_quantity, with: 5
 
       click_on "Create Discount"
 
       expect(current_path).to eq("/merchant/items")
 
       expect(Discount.all.size).to eq(1)
-      expect(Discount.all.first.discount).to eq(0.1)
-      expect(Discount.all.first.quantity_required).to eq(5)
+      expect(Discount.all.first.percent_off).to eq(0.1)
+      expect(Discount.all.first.min_quantity).to eq(5)
     end
   end
 end

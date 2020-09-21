@@ -6,27 +6,28 @@ class Order < ApplicationRecord
   enum status: ['pending', 'packaged', 'shipped', 'cancelled']
 
   def grand_total
+    apply_discount
     order_items.sum('price * quantity')
   end
 
-  def grand_total_after_discount
-    discounts = []
-    total_undiscounted = 0.0
-    grand_total = 0.0
+  def apply_discount
+    discounts = discounts_applicable
     order_items.each do |order_item|
-      item = order_item.item
-      if item.discount && order_item.quantity >= item.discount.quantity_required
-        grand_total += (item.price * order_item.quantity)
-        discounts << item.discount.discount
-      elsif
-        total_undiscounted += (item.price * order_item.quantity)
+      merchant = order_item.item.merchant
+      if discounts.include?(merchant.id) && order_item.item.price == order_item.price  
+        order_item.update(price: (order_item.price - (order_item.price * discounts[merchant.id])))
       end
     end
-    if discounts != []
-      set_discounts(order_items, discounts.max)
-      grand_total -= (grand_total * discounts.max)
+  end
+
+  def discounts_applicable
+    discounts = {}
+    order_items.each do |order_item|
+      if order_item.current_discount(order_item.item.merchant)
+        discounts[order_item.item.merchant.id] = order_item.current_discount(order_item.item.merchant)
+      end
     end
-    grand_total += total_undiscounted
+    discounts
   end
 
   def count_of_items
@@ -61,14 +62,5 @@ class Order < ApplicationRecord
 
   def self.by_status
     order(:status)
-  end
-
-  def set_discounts(order_items, discount)
-    order_items.each do |order_item|
-      item = order_item.item
-      if item.discount && order_item.quantity >= item.discount.quantity_required
-        order_item.update(discount: discount)
-      end
-    end
   end
 end

@@ -1,12 +1,11 @@
-<br><%= form_tag "/merchant/item/:id/discount/create" do %>
+<br><%= form_tag "/merchant/:id/discount/create" do %>
 
 <label>Discount Percent: as a decimal ex.(.10)</label>
-<%= text_field_tag :discount %><br><br>
+<%= text_field_tag :percent_off %><br><br>
 
 <label>Discount Quantity:</label>
-<%= text_field_tag :quantity_required %><br><br>
+<%= text_field_tag :min_quantity %><br><br>
 
-<%= hidden_field_tag :item_id, @item.id %>
 <%= hidden_field_tag :merchant_id, @merchant.id %>
 
 <%= submit_tag 'Create Discount' %>
