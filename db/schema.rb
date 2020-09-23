@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_19_233704) do
+ActiveRecord::Schema.define(version: 2020_09_22_231954) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,7 +32,6 @@ ActiveRecord::Schema.define(version: 2020_09_19_233704) do
     t.bigint "merchant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "discount?"
     t.index ["merchant_id"], name: "index_items_on_merchant_id"
   end
 
@@ -55,7 +54,6 @@ ActiveRecord::Schema.define(version: 2020_09_19_233704) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "fulfilled", default: false
-    t.float "discount"
     t.index ["item_id"], name: "index_order_items_on_item_id"
     t.index ["order_id"], name: "index_order_items_on_order_id"
   end
@@ -94,10 +92,6 @@ ActiveRecord::Schema.define(version: 2020_09_19_233704) do
   end
 
   add_foreign_key "discounts", "merchants"
-  add_foreign_key "items", "merchants"
-  add_foreign_key "order_items", "items"
-  add_foreign_key "order_items", "orders"
   add_foreign_key "orders", "users"
-  add_foreign_key "reviews", "items"
   add_foreign_key "users", "merchants"
 end

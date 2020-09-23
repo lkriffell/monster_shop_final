@@ -59,18 +59,25 @@ class Cart
     total
   end
 
-  def current_discount(merchant)
-    if merchant.class == Merchant && merchant.discounts
-      current_discount = nil
-      merchant_contents = merchant_contents_in_cart(merchant)
-      merchant.discounts.order(:min_quantity).reverse.each do |discount|
-        if merchant_contents.invert.max[0] >= discount.min_quantity
-          current_discount = discount.percent_off
-          break
-        end
-      end
-      current_discount
+  def apply_discount(item)
+    current_discount = current_discount(item.merchant)
+    if current_discount
+      calculate(current_discount, item.id)
+    else
+      subtotal_of(item.id)
     end
+  end
+
+  def current_discount(merchant)
+    current_discount = nil
+    merchant_contents = merchant_contents_in_cart(merchant)
+    merchant.discounts.order(:min_quantity).reverse.each do |discount|
+      if merchant_contents.invert.max[0] >= discount.min_quantity
+        current_discount = discount.percent_off
+        break
+      end
+    end
+    current_discount
   end
 
   def merchant_contents_in_cart(merchant)
@@ -82,15 +89,6 @@ class Cart
       end
     end
     merchant_contents
-  end
-
-  def apply_discount(item)
-    current_discount = current_discount(item.merchant)
-    if current_discount
-      calculate(current_discount, item.id)
-    else
-      subtotal_of(item.id)
-    end
   end
 
   def merchants_in_cart

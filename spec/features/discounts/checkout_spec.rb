@@ -16,7 +16,24 @@ RSpec.describe 'when checked out' do
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
     end
 
-    it 'has discount applied to item_order total' do
+    it 'has smallest discount applied to item_order total' do
+
+      visit "/items/#{@ogre.id}"
+
+      click_button "Add to Cart"
+
+      click_link "Cart: 1"
+
+      3.times do
+        click_button "More of This!"
+      end
+
+      click_button "Check Out"
+
+      expect(page).to have_content("Total: $76.00")
+    end
+
+    it 'has larger discount applied to item_order total' do
 
       visit "/items/#{@ogre.id}"
 
@@ -33,7 +50,7 @@ RSpec.describe 'when checked out' do
       expect(page).to have_content("Total: $90.00")
     end
 
-    it 'has largest discount applied' do
+    it 'has multiple largest discounts applied' do
 
       visit "/items/#{@ogre.id}"
 

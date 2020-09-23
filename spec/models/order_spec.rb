@@ -65,9 +65,10 @@ RSpec.describe Order do
       expect(@order_2.status).to eq('pending')
     end
 
-    it '.apply_discount' do
+    it '.apply_discount (cant apply more than once)' do
       Discount.create!(percent_off: 0.5, min_quantity: 5, merchant_id: @megan.id)
 
+      expect(@order_item_1.price).to eq(20)
       @order_1.apply_discount
       expect(@order_item_1.price).to eq(10)
       @order_1.apply_discount
@@ -87,6 +88,5 @@ RSpec.describe Order do
     it '.by_status' do
       expect(Order.by_status).to eq([@order_2, @order_1, @order_4, @order_3])
     end
-
   end
 end

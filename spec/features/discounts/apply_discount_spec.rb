@@ -13,6 +13,22 @@ RSpec.describe 'On checkout' do
       discount = Discount.create!(percent_off: 0.5, min_quantity: 5, merchant_id: brian.id)
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
     end
+    it 'has no discount applied' do
+
+      visit "/items/#{@ogre.id}"
+
+      click_button "Add to Cart"
+
+      click_link "Cart: 1"
+
+      3.times do
+        click_button "More of This!"
+      end
+
+      expect(page).to have_content("Total: $80.00")
+      expect(page).to have_content("Total (After Discount): $80.00")
+    end
+
     it 'has discount applied' do
 
       visit "/items/#{@ogre.id}"
@@ -29,7 +45,7 @@ RSpec.describe 'On checkout' do
       expect(page).to have_content("Total (After Discount): $90.00")
     end
 
-    it 'has largest discount applied' do
+    it 'has multiple discounts applied' do
 
       visit "/items/#{@ogre.id}"
 

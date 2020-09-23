@@ -16,15 +16,13 @@ class OrderItem < ApplicationRecord
   end
 
   def current_discount(merchant)
-    if merchant.class == Merchant && merchant.discounts
-      current_discount = nil
-      merchant.discounts.order(:min_quantity).reverse.each do |discount|
-        if quantity >= discount.min_quantity
-          current_discount = discount.percent_off
-          break
-        end
+    current_discount = nil
+    merchant.discounts.order(:min_quantity).reverse.each do |discount|
+      if quantity >= discount.min_quantity
+        current_discount = discount.percent_off
+        break
       end
-      current_discount
     end
+    current_discount
   end
 end
