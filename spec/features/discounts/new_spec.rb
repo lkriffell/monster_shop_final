@@ -12,7 +12,7 @@ RSpec.describe 'Merchant items index page' do
       brian.items.create!(name: 'Hippo', description: "I'm a Hippo!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 3 )
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(merchant)
 
-      visit "/merchant/items"
+      visit "/merchant/"
 
       expect(page).to have_link("Create Bulk Discount")
 
@@ -23,7 +23,7 @@ RSpec.describe 'Merchant items index page' do
 
       click_on "Create Discount"
 
-      expect(current_path).to eq("/merchant/items")
+      expect(current_path).to eq("/merchant/")
 
       expect(Discount.all.size).to eq(1)
       expect(Discount.all.first.percent_off).to eq(0.1)

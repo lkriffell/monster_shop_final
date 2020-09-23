@@ -13,14 +13,14 @@ RSpec.describe 'Merchant items index page' do
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(merchant)
 
 
-      visit "merchant/items"
+      visit "/merchant/"
 
       expect(page).to have_link("Remove Discount")
       expect(page).to have_link("Edit Bulk Discount")
 
       click_link "Remove Discount"
 
-      expect(current_path).to eq("/merchant/items")
+      expect(current_path).to eq("/merchant/")
       expect(Discount.all).to eq([])
     end
   end

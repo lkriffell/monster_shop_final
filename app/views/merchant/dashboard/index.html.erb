@@ -3,6 +3,16 @@
 <p><%= @merchant.city %> <%= @merchant.state %> <%= @merchant.zip %></p>
 
 <%= link_to 'My Items', '/merchant/items' %>
+<% if @merchant.discounts%>
+  <% @merchant.discounts.each do |discount| %>
+    <p>Discount: <%= discount.percent_off * 100 %>% off <%= discount.min_quantity %> items or more</p>
+    <% if current_merchant_user? %>
+      <%= link_to "Remove Discount", "/merchant/#{@merchant.id}/discount/#{discount.id}/destroy", method: :delete %>
+      <%= link_to "Edit Bulk Discount", "/merchant/#{@merchant.id}/discount/#{discount.id}/edit" %><br>
+    <% end %>
+  <% end %>
+  <br><%= link_to "Create Bulk Discount", "/merchant/#{@merchant.id}/discount/new" %><br>
+<% end %>
 
 <section class="orders">
   <% @merchant.pending_orders.each do |order| %>

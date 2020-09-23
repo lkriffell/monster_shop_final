@@ -11,7 +11,7 @@ RSpec.describe 'Merchant items index page' do
       discount = Discount.create!(percent_off: 0.1, min_quantity: 5, merchant_id: megan.id)
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(merchant)
 
-      visit "/merchant/items"
+      visit "/merchant/"
 
       expect(page).to have_content("Discount: 10.0% off 5 items or more")
 
@@ -23,7 +23,7 @@ RSpec.describe 'Merchant items index page' do
       fill_in :min_quantity, with: 10
       click_on "Update Discount"
 
-      expect(current_path).to eq("/merchant/items")
+      expect(current_path).to eq("/merchant/")
 
       discount.reload
 

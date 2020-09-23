@@ -5,7 +5,7 @@ class Merchant::DiscountsController < Merchant::BaseController
 
   def create
     @discount = Discount.create!(discount_params)
-    redirect_to "/merchant/items"
+    redirect_to "/merchant/"
   end
 
   def edit
@@ -15,12 +15,12 @@ class Merchant::DiscountsController < Merchant::BaseController
   def update
     @discount = Discount.find(params[:id])
     @discount.update(discount_params)
-    redirect_to "/merchant/items"
+    redirect_to "/merchant/"
   end
 
   def destroy
     Discount.find(params[:discount_id]).delete
-    redirect_to "/merchant/items"
+    redirect_to "/merchant/"
   end
 
   private
