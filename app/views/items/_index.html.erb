@@ -9,12 +9,6 @@
   <% end %>
 </section>
 
-<h3>Discounts:</h3>
-  <% Discount.all.each do |discount| %>
-  <% merchant = Merchant.find(discount.merchant_id) %>
-    <p><%= discount.percent_off * 100 %>% off <%= discount.min_quantity %> items or more from <%= "#{merchant.name}" %></p>
-  <% end %>
-
 <% @items.each do |item| %>
   <section id='item-<%= item.id%>'>
     <h2><%= link_to item.name, "/items/#{item.id}" %></h2>
@@ -22,6 +16,10 @@
     <%= link_to(image_tag(item.image), item_path(item), id: 'image') %>
     <p>Price: <%= number_to_currency(item.price) %></p>
     <p>Sold by: <%= link_to item.merchant.name, "/merchants/#{item.merchant_id}" %>, Inventory: <%= item.inventory %></p>
+    <h3>Discounts:</h3>
+      <% item.merchant.discounts.all.each do |discount| %>
+        <p><%= discount.percent_off * 100 %>% off <%= discount.min_quantity %> items or more from <%= "#{item.merchant.name}" %></p>
+      <% end %>
     <p><%= item.active ? "Active" : "Inactive" %></p>
     <% if current_merchant_user? %>
       <% if item.active? %>
