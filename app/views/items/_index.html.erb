@@ -9,6 +9,12 @@
   <% end %>
 </section>
 
+<h3>Discounts:</h3>
+  <% Discount.all.each do |discount| %>
+  <% merchant = Merchant.find(discount.merchant_id) %>
+    <p><%= discount.percent_off * 100 %>% off <%= discount.min_quantity %> items or more from <%= "#{merchant.name}" %></p>
+  <% end %>
+
 <% @items.each do |item| %>
   <section id='item-<%= item.id%>'>
     <h2><%= link_to item.name, "/items/#{item.id}" %></h2>
