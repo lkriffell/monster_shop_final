@@ -44,7 +44,7 @@ class Cart
     count_of(item_id) == Item.find(item_id).inventory
   end
 
-  def calculate(current_discount, item_id)
+  def calculate_subtotal_of_discount(current_discount, item_id)
     total_off = subtotal_of(item_id) * current_discount
     subtotal_of(item_id) - total_off
   end
@@ -62,7 +62,7 @@ class Cart
   def apply_discount(item)
     current_discount = current_discount(item.merchant)
     if current_discount
-      calculate(current_discount, item.id)
+      calculate_subtotal_of_discount(current_discount, item.id)
     else
       subtotal_of(item.id)
     end
