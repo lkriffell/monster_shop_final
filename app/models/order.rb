@@ -6,7 +6,28 @@ class Order < ApplicationRecord
   enum status: ['pending', 'packaged', 'shipped', 'cancelled']
 
   def grand_total
+    apply_discount
     order_items.sum('price * quantity')
+  end
+
+  def apply_discount
+    discounts = discounts_applicable
+    order_items.each do |order_item|
+      merchant = order_item.item.merchant
+      if discounts.include?(merchant.id) && order_item.item.price == order_item.price  
+        order_item.update(price: (order_item.price - (order_item.price * discounts[merchant.id])))
+      end
+    end
+  end
+
+  def discounts_applicable
+    discounts = {}
+    order_items.each do |order_item|
+      if order_item.current_discount(order_item.item.merchant)
+        discounts[order_item.item.merchant.id] = order_item.current_discount(order_item.item.merchant)
+      end
+    end
+    discounts
   end
 
   def count_of_items
